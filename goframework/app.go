@@ -9,6 +9,7 @@ var interval int =30
 var timerid int
 var drawFunc func()
 var painter *ui.Painter
+var brush   *ui.Brush
 
 var windowWidth,windowHeight int = 400,400
 
@@ -49,6 +50,14 @@ func Draw(draw func()){
 }
 func Rect(x int , y int , width int, height int){
     painter.DrawRect(ui.Rect{x,y,width,height})
+}
+
+func Fill(r int, g int, b int){
+    if brush {
+     
+    }else{
+        brush=ui.NewBrush()
+    }
 }
 
 func Background(r uint8,g uint8,b uint8){
