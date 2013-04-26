@@ -42,14 +42,11 @@ func Win(width int,height int){
             painter.End()
         })
         w.OnMousePressEvent(func(e *ui.MouseEvent){
-            fmt.Println("press")
             _mousePressed=true
         })
         w.OnMouseMoveEvent(func(e *ui.MouseEvent){
-            fmt.Println("move")
             _mouseX = e.Pos().X
             _mouseY = e.Pos().Y
-            fmt.Println(e.Pos())
         })
         w.OnMouseReleaseEvent(func(e *ui.MouseEvent){
             _mousePressed=false
