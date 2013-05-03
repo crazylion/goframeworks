@@ -15,7 +15,7 @@ func Draw(){
         x,y := v.Position()
         goframework.StrokeWeight(2);
         t:=time.Now()
-        col:=int(t.Second()*4/255)
+        col:=int(t.Second()*4%255)
         goframework.Stroke(col);
         goframework.Point(x,y)
     }
