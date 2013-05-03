@@ -2,19 +2,21 @@ package goframework
 import (
     "github.com/crazylion/go-ui/ui"
     "image/color"
+    "reflect"
 )
 
 var _strokeWeight int = 1
 
-func Fill(r uint8, gb ...uint8){
+func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
         Brush=ui.NewBrush()
     }
+    r:=translateToUint8(ir)
     g:=r
     b:=r
     if gb != nil {
-        g=gb[0]
-        b=gb[1]
+        g=translateToUint8(gb[0])
+        b=translateToUint8(gb[1])
 
     }
     Brush.SetStyle(ui.SolidPattern)
@@ -34,15 +36,19 @@ func StrokeWeight(weight int){
     _strokeWeight=weight
 }
 
-func Stroke(r uint8,gb ...uint8){
+/**
+allow int,uint,float
+*/
+func Stroke(ir interface{},gb ...interface{}){
     if Pen == nil {
         Pen = ui.NewPen()
     }
+    r:=translateToUint8(ir)
     g:=r
     b:=r
     if gb != nil {
-        g=gb[0]
-        b=gb[1]
+        g=translateToUint8(gb[0])
+        b=translateToUint8(gb[1])
 
     }
     Pen.SetColor(color.RGBA{r,g,b,0 })
@@ -52,11 +58,28 @@ func Stroke(r uint8,gb ...uint8){
 
 // base 
 
+func translateToUint8(a interface{}) uint8{
+    t := reflect.TypeOf(a)
+    kind := t.Kind()
+    v :=reflect.ValueOf(a)
+    if kind ==reflect.Uint8 {
+        return uint8(v.Int())
+    } else if kind == reflect.Float64 {
+        return uint8(v.Float())
+    }
+    //assume a is a int
+    return uint8(v.Int())
+}
+
 func Point(x1,y2 int){
     Painter.DrawPoint(ui.Point{x1,y2})
 }
 
-func Line(x1,y1,x2,y2 int){
+func Line(ix1,iy1,ix2,iy2 interface{}){
+    x1:=int(translateToUint8(ix1))
+    x2:=int(translateToUint8(ix2))
+    y1:=int(translateToUint8(iy1))
+    y2:=int(translateToUint8(iy2))
     Painter.DrawLine(ui.Point{x1,y1},ui.Point{x2,y2})
 }
 
