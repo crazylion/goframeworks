@@ -7,7 +7,7 @@ import (
 
 var _strokeWeight int = 1
 
-func Fill(ir uint8, gb ...uint8){
+func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
         Brush=ui.NewBrush()
     }
