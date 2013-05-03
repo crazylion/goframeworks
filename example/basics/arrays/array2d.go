@@ -9,7 +9,7 @@ func Draw(){
     for i:=0; i<height; i+=2 {
         for j:=0; j<width; j+=2 {
             goframework.StrokeWeight(2)
-            goframework.Stroke(uint8(distances[j][i]))
+            goframework.Stroke(distances[j][i])
             goframework.Point(j, i)
         }
     }
@@ -24,10 +24,6 @@ func main(){
         for j:=0; j<width; j++ {
             dist := goframework.Dist(width/2, height/2, j, i)
             distances[j][i] = dist/maxDistance * 255
-/*             if j ==width/2 && i == height/2{ */
-/*                 fmt.Println(distances[j][i] ) */
-/*             } */
-/*             fmt.Println(distances[j][i]) */
         }
     }
     goframework.FrameRate(1)

@@ -12,15 +12,15 @@ func Draw(){
           coswave[i] = math.Abs(math.Cos(amount))
       }
       for i := 0; i < width; i++ {
-          goframework.Stroke(uint8(coswave[i]*255))
+          goframework.Stroke(coswave[i]*255)
           goframework.Line(i, 0, i, height/3)
       }
       for i := 0; i < width; i++ {
-          goframework.Stroke(uint8(coswave[i]*255 / 4))
-          goframework.Line(i, int(height/3), i,int(height/3*2))
+          goframework.Stroke(coswave[i]*255 / 4)
+          goframework.Line(i, height/3, i,height/3*2)
       }
       for i := 0; i < width; i++ {
-          goframework.Stroke(uint8(255 - coswave[i]*255))
+          goframework.Stroke(255 - coswave[i]*255)
           goframework.Line(i, height/3*2, i, height)
       }
   }
