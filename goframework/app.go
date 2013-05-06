@@ -7,6 +7,7 @@ var w *ui.Widget
 var interval int =30
 var timerid int
 var drawFunc func()
+var setupFunc func() = nil
 var Painter *ui.Painter
 var Brush   *ui.Brush
 var Pen     *ui.Pen
@@ -26,6 +27,9 @@ func Win(width int,height int){
         w.SetSize(ui.Size{width, height})
         w.SetOpAquepaintevent(true)
         w.SetMouseTracking(true)
+        if setupFunc != nil {
+           setupFunc() 
+        }
 /*         w.SetAttr() */
         w.OnTimerEvent(func(e *ui.TimerEvent) {
             if e.TimerId() == timerid {
@@ -63,7 +67,11 @@ func FrameRate(rate int){
 }
 
 func Draw(draw func()){
-   drawFunc = draw 
+   drawFunc = draw
+}
+
+func Setup(setup func()){
+    setupFunc = setup
 }
 
 
