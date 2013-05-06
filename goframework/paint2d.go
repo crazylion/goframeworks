@@ -24,12 +24,20 @@ func Fill(ir interface{}, gb ...interface{}){
     Painter.SetBrush(Brush)
 }
 
-func Background(r uint8,g uint8,b uint8){
+func Background(ir interface{},gb ... interface{}){
 /*     Brush := ui.NewBrush() */
 /*     Brush.SetStyle(ui.SolidPattern) */
 /*     Brush.SetColor(color.RGBA{r,g,b, 255}) */
 /*     Painter.SetBrush(Brush) */
-    Painter.DrawRect(ui.Rect{0,0,windowWidth,windowHeight})
+    r:=int(translateToUint8(ir))
+    g:=r
+    b:=r
+    if gb != nil {
+        g=int(translateToUint8(gb[0]))
+        b=int(translateToUint8(gb[1]))
+    }
+    Fill(r,g,b)
+    Rect(0,0,windowWidth,windowHeight)
 }
 
 func StrokeWeight(weight int){
