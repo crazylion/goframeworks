@@ -2,7 +2,6 @@ package goframework
 import (
     "github.com/crazylion/go-ui/ui"
     "image/color"
-    "reflect"
 )
 
 var _strokeWeight int = 1
@@ -11,14 +10,17 @@ func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
         Brush=ui.NewBrush()
     }
-    r:=translateToUint8(ir)
+    r:=anyToUint8(ir)
     g:=r
     b:=r
     if gb != nil {
-        g=translateToUint8(gb[0])
-        b=translateToUint8(gb[1])
+/*         g=gb[0] */
+/*         b=gb[1] */
+        g=anyToUint8(gb[0])
+        b=anyToUint8(gb[1])
 
     }
+    r,g,b=CountColor(r,g,b)
     Brush.SetStyle(ui.SolidPattern)
     Brush.SetColor(color.RGBA{r,g,b,0})
     Painter.SetBrush(Brush)
@@ -29,12 +31,12 @@ func Background(ir interface{},gb ... interface{}){
 /*     Brush.SetStyle(ui.SolidPattern) */
 /*     Brush.SetColor(color.RGBA{r,g,b, 255}) */
 /*     Painter.SetBrush(Brush) */
-    r:=int(translateToUint8(ir))
+    r:=int(anyToUint8(ir))
     g:=r
     b:=r
     if gb != nil {
-        g=int(translateToUint8(gb[0]))
-        b=int(translateToUint8(gb[1]))
+        g=int(anyToUint8(gb[0]))
+        b=int(anyToUint8(gb[1]))
     }
     Fill(r,g,b)
     Rect(0,0,windowWidth,windowHeight)
@@ -51,12 +53,12 @@ func Stroke(ir interface{},gb ...interface{}){
     if Pen == nil {
         Pen = ui.NewPen()
     }
-    r:=translateToUint8(ir)
+    r:=anyToUint8(ir)
     g:=r
     b:=r
     if gb != nil {
-        g=translateToUint8(gb[0])
-        b=translateToUint8(gb[1])
+        g=anyToUint8(gb[0])
+        b=anyToUint8(gb[1])
 
     }
     Pen.SetColor(color.RGBA{r,g,b,0 })
@@ -66,28 +68,15 @@ func Stroke(ir interface{},gb ...interface{}){
 
 // base 
 
-func translateToUint8(a interface{}) uint8{
-    t := reflect.TypeOf(a)
-    kind := t.Kind()
-    v :=reflect.ValueOf(a)
-    if kind ==reflect.Uint8 {
-        return uint8(v.Int())
-    } else if kind == reflect.Float64 {
-        return uint8(v.Float())
-    }
-    //assume a is a int
-    return uint8(v.Int())
-}
-
 func Point(x1,y2 int){
     Painter.DrawPoint(ui.Point{x1,y2})
 }
 
 func Line(ix1,iy1,ix2,iy2 interface{}){
-    x1:=int(translateToUint8(ix1))
-    x2:=int(translateToUint8(ix2))
-    y1:=int(translateToUint8(iy1))
-    y2:=int(translateToUint8(iy2))
+    x1:=int(anyToUint8(ix1))
+    x2:=int(anyToUint8(ix2))
+    y1:=int(anyToUint8(iy1))
+    y2:=int(anyToUint8(iy2))
     Painter.DrawLine(ui.Point{x1,y1},ui.Point{x2,y2})
 }
 
