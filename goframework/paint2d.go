@@ -5,6 +5,7 @@ import (
 )
 
 var _strokeWeight int = 1
+var penStyle = ui.SolidLine
 
 func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
@@ -63,7 +64,16 @@ func Stroke(ir interface{},gb ...interface{}){
     }
     Pen.SetColor(color.RGBA{r,g,b,0 })
     Pen.SetWidth(_strokeWeight)
+    Pen.SetWidth(0)
     Painter.SetPen(Pen)
+}
+
+func NoStroke(){
+    penStyle= ui.NoPen
+    if Pen == nil {
+        Pen = ui.NewPen()
+    }
+    Pen.SetStyle(penStyle)
 }
 
 // base 
