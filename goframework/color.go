@@ -9,9 +9,27 @@ import (
 )
 const RGB int=0
 const HSB int=1 
+var colorRange1,colorRange2,colorRange3 float64 = 255,255,255
 var currentColorMode int
-func ColorMode(mode int){
-    currentColorMode=mode 
+func ColorMode(mode int,ranges ... interface{}){
+    currentColorMode=mode
+    if HSB==mode {
+        colorRange1=360
+        colorRange2=1
+        colorRange2=1
+    }else{
+        //reset to back
+        colorRange1=255
+        colorRange2=255
+        colorRange2=255
+    }
+    if ranges != nil && len(ranges)>0 {
+        switch(len(ranges)){
+            case 1: colorRange1 = anyToFloat64(ranges[0])
+            case 2: colorRange1 = anyToFloat64(ranges[0]); colorRange2 = anyToFloat64(ranges[1])
+            case 3:colorRange1 = anyToFloat64(ranges[0]); colorRange2 = anyToFloat64(ranges[1]);colorRange3 = anyToFloat64(ranges[2])
+        }
+    }
 }
 
 
@@ -20,15 +38,19 @@ func ColorMode(mode int){
 */
 func CountColor(ih,is,iv interface{}) (rr,rg,rb uint8){
     var r,g,b float64;
+    h:=anyToFloat64(ih)
+    s:=anyToFloat64(is)
+    v:=anyToFloat64(iv)
     if currentColorMode == HSB {
-        h:=anyToFloat64(ih)
-        s:=anyToFloat64(is)
-        v:=anyToFloat64(iv)
+        //mapping to range
+        h= Map(h,0,colorRange1,0,360)
+        s= Map(s,0,colorRange2,0,1)
+        v= Map(v,0,colorRange3,0,1)
+
         c:= v*s
         h= h/60
         x:=c*(1-math.Abs( float64(math.Mod(h,2)  -1 )  ))
         hplus := math.Floor(h)
-        fmt.Println("hplus=",hplus)
         switch(hplus){
             case 0:
                 r=c
@@ -56,17 +78,20 @@ func CountColor(ih,is,iv interface{}) (rr,rg,rb uint8){
                 b=x
         }
         m:=v-c
-        fmt.Println("m=",m)
         rr =uint8((r+m)*255)
         rg =uint8((g+m)*255)
         rb =uint8((b+m)*255)
-        fmt.Println("input:r=",ih,",",is,",",iv)
-        fmt.Println("result:r=",rr,",",rg,",",rb)
+/*         fmt.Println("input:r=",ih,",",is,",",iv) */
+/*         fmt.Println("result:r=",rr,",",rg,",",rb) */
     }else{
+        //mapping to range
+        h:= Map(h,0,colorRange1,0,255)
+        s:= Map(s,0,colorRange2,0,255)
+        v:= Map(v,0,colorRange3,0,255)
         //rgb
-        rr=anyToUint8(ih)
-        rg=anyToUint8(is)
-        rb=anyToUint8(iv)
+        rr=anyToUint8(h)
+        rg=anyToUint8(s)
+        rb=anyToUint8(v)
     }
     return
 
