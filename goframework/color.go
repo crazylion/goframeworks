@@ -18,54 +18,55 @@ func ColorMode(mode int){
 /**
  if colorMode ==HSB  translte x,y,z,a value to hsb
 */
-func CountColor(ih,is,iv interface{}) (r,g,b uint8){
+func CountColor(ih,is,iv interface{}) (rr,rg,rb uint8){
+    var r,g,b float64;
     if currentColorMode == HSB {
         h:=anyToFloat64(ih)
         s:=anyToFloat64(is)
         v:=anyToFloat64(iv)
-        h /= 60.0
-        i := math.Floor(h)
-        f := h - i
-        p := v*(1 - s)
-        q := v*(1 - s * f)
-        t := v*(1 - s * (1 - f))
-        switch(i) {
-        case 0:
-            r = uint8(v)
-            g = uint8(t)
-            b = uint8(p)
-            break
-        case 1:
-            r = uint8(q)
-            g = uint8(v)
-            b = uint8(p)
-            break
-        case 2:
-            r = uint8(p)
-            g = uint8(v)
-            b = uint8(t)
-            break
-        case 3:
-            r = uint8(p)
-            g = uint8(q)
-            b = uint8(v)
-            break
-        case 4:
-            r = uint8(t)
-            g = uint8(p)
-            b = uint8(v)
-            break
-        default:// case 5:
-            r = uint8(v)
-            g = uint8(p)
-            b = uint8(q)
-            break
+        c:= v*s
+        h= h/60
+        x:=c*(1-math.Abs( float64(math.Mod(h,2)  -1 )  ))
+        hplus := math.Floor(h)
+        fmt.Println("hplus=",hplus)
+        switch(hplus){
+            case 0:
+                r=c
+                g=x
+                b=0
+            case 1:
+                r=x
+                g=c
+                b=0
+            case 2:
+                r=0
+                g=c
+                b=x
+            case 3:
+                r=0
+                g=x
+                b=c
+            case 4:
+                r=x
+                g=0
+                b=c
+            case 5:
+                r=c
+                g=0
+                b=x
         }
+        m:=v-c
+        fmt.Println("m=",m)
+        rr =uint8((r+m)*255)
+        rg =uint8((g+m)*255)
+        rb =uint8((b+m)*255)
+        fmt.Println("input:r=",ih,",",is,",",iv)
+        fmt.Println("result:r=",rr,",",rg,",",rb)
     }else{
         //rgb
-        r=anyToUint8(r)
-        g=anyToUint8(g)
-        b=anyToUint8(b)
+        rr=anyToUint8(ih)
+        rg=anyToUint8(is)
+        rb=anyToUint8(iv)
     }
     return
 

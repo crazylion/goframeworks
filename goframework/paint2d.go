@@ -7,6 +7,7 @@ import (
 var _strokeWeight int = 1
 var penStyle = ui.SolidLine
 var penColor = color.RGBA{0,0,0,0}
+var brushColor =color.RGBA{0,0,0,0}
 
 func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
@@ -16,8 +17,6 @@ func Fill(ir interface{}, gb ...interface{}){
     g:=r
     b:=r
     if gb != nil {
-/*         g=gb[0] */
-/*         b=gb[1] */
         g=anyToUint8(gb[0])
         b=anyToUint8(gb[1])
 
@@ -47,6 +46,7 @@ func Background(ir interface{},gb ... interface{}){
 
 func StrokeWeight(weight int){
     _strokeWeight=weight
+    setPen()
 }
 
 /**
@@ -64,12 +64,14 @@ func Stroke(ir interface{},gb ...interface{}){
         b=anyToUint8(gb[1])
 
     }
-    penColor = color.RGBA{r,g,b,0 }
+    r,g,b = CountColor(r,g,b)
+    penColor = color.RGBA{r,g,b,255 }
     setPen()
 }
 
 func NoStroke(){
     penStyle= ui.NoPen
+    setPen()
 }
 
 func setPen(){
