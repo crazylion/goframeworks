@@ -7,11 +7,13 @@ var w *ui.Widget
 var interval int =30
 var timerid int
 var drawFunc func()
+var setupFunc func() = nil
 var Painter *ui.Painter
 var Brush   *ui.Brush
 var Pen     *ui.Pen
 var _mousePressed = false
 var _mouseX,_mouseY int = 0,0
+var isInit bool = false
 
 var windowWidth,windowHeight int = 400,400
 
@@ -36,6 +38,12 @@ func Win(width int,height int){
             Painter = ui.NewPainter()
             defer Painter.Close()
             Painter.Begin(w)
+            if !isInit {
+                isInit=true
+                if setupFunc != nil {
+                   setupFunc() 
+                }
+            }
             if drawFunc != nil {
                 drawFunc()
             }
@@ -63,7 +71,11 @@ func FrameRate(rate int){
 }
 
 func Draw(draw func()){
-   drawFunc = draw 
+   drawFunc = draw
+}
+
+func Setup(setup func()){
+    setupFunc = setup
 }
 
 
