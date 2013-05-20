@@ -2,12 +2,23 @@ package goframework
 import (
     "github.com/crazylion/go-ui/ui"
     "image/color"
+    "math"
 )
 
 var _strokeWeight int = 1
 var penStyle = ui.SolidLine
 var penColor = color.RGBA{0,0,0,0}
 var brushColor =color.RGBA{0,0,0,0}
+
+const(
+    CENTER =1
+    RADIUS =2
+    CORNEOR =3
+    CORNERS =4
+)
+var ellipseMode=CENTER
+
+
 
 func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
@@ -106,4 +117,29 @@ func Rect(x int , y int , width int, height int){
 
 func Ellipse(x int,y int,width int, height int){
     Painter.DrawEllipse(ui.Rect{x-width/2,y-height/2,width,height})
+}
+
+func EllipseMode(mode int){
+    ellipseMode=mode
+}
+
+/* start,stop  specified in radians */
+func Arc(x int, y int, width int, height int, start float64, stop float64) {
+    var startAngle int =  int(start *180 /math.Pi)
+    var stopAngle int =  int(stop *180 /math.Pi ) - startAngle 
+    startAngle*=-16
+    stopAngle*=-16
+    if ellipseMode== CORNERS {
+        width-=x
+        height-=y
+    }else if ellipseMode == RADIUS{
+        x-=width
+        y-=height
+        width*=2
+        height*=2
+    }else if ellipseMode ==CENTER{
+        x-= width/2
+        y-= height/2
+    }
+    Painter.DrawPie(ui.Rect{x,y,width,height},startAngle,stopAngle)
 }
