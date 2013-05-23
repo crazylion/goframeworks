@@ -24,14 +24,7 @@ func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
         Brush=ui.NewBrush()
     }
-    r:=anyToUint8(ir)
-    g:=r
-    b:=r
-    if gb != nil {
-        g=anyToUint8(gb[0])
-        b=anyToUint8(gb[1])
-
-    }
+    r,g,b:=anyToColor(ir,gb)
     r,g,b=CountColor(r,g,b)
     Brush.SetStyle(ui.SolidPattern)
     Brush.SetColor(color.RGBA{r,g,b,0})
@@ -44,13 +37,8 @@ func Background(ir interface{},gb ... interface{}){
 /*     Brush.SetStyle(ui.SolidPattern) */
 /*     Brush.SetColor(color.RGBA{r,g,b, 255}) */
 /*     Painter.SetBrush(Brush) */
-    r:=int(anyToUint8(ir))
-    g:=r
-    b:=r
-    if gb != nil {
-        g=int(anyToUint8(gb[0]))
-        b=int(anyToUint8(gb[1]))
-    }
+    r,g,b:=anyToColor(ir,gb)
+    r,g,b=CountColor(r,g,b)
     Fill(r,g,b)
     Rect(0,0,windowWidth,windowHeight)
 }
@@ -67,14 +55,7 @@ func Stroke(ir interface{},gb ...interface{}){
     if Pen == nil {
         Pen = ui.NewPen()
     }
-    r:=anyToUint8(ir)
-    g:=r
-    b:=r
-    if gb != nil {
-        g=anyToUint8(gb[0])
-        b=anyToUint8(gb[1])
-
-    }
+    r,g,b:=anyToColor(ir,gb)
     r,g,b = CountColor(r,g,b)
     penColor = color.RGBA{r,g,b,255 }
     setPen()

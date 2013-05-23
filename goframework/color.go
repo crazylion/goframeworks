@@ -6,9 +6,10 @@ package goframework
 import (
     "fmt"
     "math"
+    "image/color"
 )
 const RGB int=0
-const HSB int=1 
+const HSB int=1
 var colorRange1,colorRange2,colorRange3 float64 = 255,255,255
 var currentColorMode int
 func ColorMode(mode int,ranges ... interface{}){
@@ -97,6 +98,11 @@ func CountColor(ih,is,iv interface{}) (rr,rg,rb uint8){
 
 }
 
+/*
+ translate the params to color.RGBA
+
+*/
+
 func anyToUint8(any interface{}) uint8{
     switch any := any.(type) {
     default:
@@ -109,6 +115,37 @@ func anyToUint8(any interface{}) uint8{
         return uint8(any)
     }
     return 0
+}
+
+func anyToColor(ir interface{}, gb []interface{})(r,g,b uint8){
+    isColor :=false
+    switch ir := ir.(type) {
+    default:
+        fmt.Printf("unexpected type %T", ir)       // %T prints whatever type t has
+    case float64:
+        r=uint8(ir)
+    case uint8:
+        r=uint8(ir)
+    case int:
+        r=uint8(ir)
+    case color.RGBA:
+        r= ir.R
+        g=ir.G
+        b=ir.B
+        isColor=true
+    }
+    if !isColor {
+        if gb!=nil {
+            g=anyToUint8(gb[0])
+            b=anyToUint8(gb[1])
+        }else{
+            g=r
+            b=r
+        }
+    }
+
+    return
+
 }
 
 func anyToFloat64(any interface{}) float64{
