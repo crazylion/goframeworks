@@ -130,7 +130,7 @@ func anyToUint8(any interface{}) uint8{
     return 0
 }
 
-func Toint(any interface{}) int{
+func ToInt(any interface{}) int{
     switch any := any.(type) {
     default:
         fmt.Printf("unexpected type %T", any)       // %T prints whatever type t has
