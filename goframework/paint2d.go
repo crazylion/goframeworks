@@ -79,6 +79,12 @@ func setPen(){
 
 // base 
 
+
+func Set(x interface{},y interface{},c color.RGBA){
+    Stroke(c)
+    Point(Toint(x),Toint(y))
+}
+
 func Point(x1,y2 int){
     Painter.DrawPoint(ui.Point{x1,y2})
 }

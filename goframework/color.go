@@ -98,6 +98,19 @@ func CountColor(ih,is,iv interface{}) (rr,rg,rb uint8){
 
 }
 
+
+func Red(c color.RGBA) int{
+   return int(c.R)
+}
+
+func Green(c color.RGBA) int{
+   return int(c.G)
+}
+
+func Blue(c color.RGBA) int{
+   return int(c.B)
+}
+
 /*
  translate the params to color.RGBA
 
@@ -113,6 +126,20 @@ func anyToUint8(any interface{}) uint8{
         return uint8(any)
     case int:
         return uint8(any)
+    }
+    return 0
+}
+
+func Toint(any interface{}) int{
+    switch any := any.(type) {
+    default:
+        fmt.Printf("unexpected type %T", any)       // %T prints whatever type t has
+    case float64:
+        return int(any)
+    case uint8:
+        return int(any)
+    case int:
+        return int(any)
     }
     return 0
 }
