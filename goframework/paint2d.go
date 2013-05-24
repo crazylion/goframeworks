@@ -9,6 +9,7 @@ var _strokeWeight int = 1
 var penStyle = ui.SolidLine
 var penColor = color.RGBA{0,0,0,0}
 var brushColor =color.RGBA{0,0,0,0}
+var brushStyle= ui.SolidPattern
 
 const(
     CENTER =1
@@ -18,7 +19,10 @@ const(
 )
 var ellipseMode=CENTER
 
-
+func NoFill(){
+    brushStyle=ui.NoBrush
+    setBrush(0,0,0)
+}
 
 func Fill(ir interface{}, gb ...interface{}){
     if Brush==nil {
@@ -26,10 +30,7 @@ func Fill(ir interface{}, gb ...interface{}){
     }
     r,g,b:=anyToColor(ir,gb)
     r,g,b=CountColor(r,g,b)
-    Brush.SetStyle(ui.SolidPattern)
-    Brush.SetColor(color.RGBA{r,g,b,0})
-    Painter.SetBrush(Brush)
-    setPen()
+    setBrush(r,g,b)
 }
 
 func Background(ir interface{},gb ... interface{}){
@@ -77,12 +78,21 @@ func setPen(){
     Pen.SetStyle(penStyle)
 }
 
+func setBrush(r,g,b uint8){
+    if Brush ==nil {
+        Brush=ui.NewBrush()
+    }
+    Brush.SetStyle(brushStyle)
+    Brush.SetColor(color.RGBA{r,g,b,0})
+    Painter.SetBrush(Brush)
+}
+
 // base 
 
 
 func Set(x interface{},y interface{},c color.RGBA){
     Stroke(c)
-    Point(Toint(x),Toint(y))
+    Point(ToInt(x),ToInt(y))
 }
 
 func Point(x1,y2 int){
@@ -97,12 +107,20 @@ func Line(ix1,iy1,ix2,iy2 interface{}){
     Painter.DrawLine(ui.Point{x1,y1},ui.Point{x2,y2})
 }
 
-func Rect(x int , y int , width int, height int){
+func Rect(ix interface{} , iy interface{} , iwidth interface{}, iheight interface{}){
+    x:=ToInt(ix)
+    y:=ToInt(iy)
+    width:=ToInt(iwidth)
+    height:=ToInt(iheight)
     Painter.DrawRect(ui.Rect{x,y,width,height})
 }
 
 
-func Ellipse(x int,y int,width int, height int){
+func Ellipse(ix interface{},iy interface{},iwidth interface{},iheight interface{}){
+    x:=ToInt(ix)
+    y:=ToInt(iy)
+    width:=ToInt(iwidth)
+    height:=ToInt(iheight)
     Painter.DrawEllipse(ui.Rect{x-width/2,y-height/2,width,height})
 }
 
