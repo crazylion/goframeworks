@@ -9,11 +9,13 @@ var timerid int
 var drawFunc func()
 var setupFunc func() = nil
 var Painter *ui.Painter
+var painter *ui.Painter
 var Brush   *ui.Brush
 var Pen     *ui.Pen
 var _mousePressed = false
 var _mouseX,_mouseY int = 0,0
 var isInit bool = false
+var mainCanvas *ui.Image  //main canvas
 
 var windowWidth,windowHeight int = 400,400
 
@@ -28,26 +30,30 @@ func Win(width int,height int){
         w.SetSize(ui.Size{width, height})
         w.SetOpAquepaintevent(true)
         w.SetMouseTracking(true)
+        mainCanvas:= ui.NewImageWithSize(width,height)
+        defer mainCanvas.Close()
+        Painter= ui.NewPainterWithImage(mainCanvas)
 /*         w.SetAttr() */
         w.OnTimerEvent(func(e *ui.TimerEvent) {
             if e.TimerId() == timerid {
+                if !isInit {
+                    isInit=true
+                    if setupFunc != nil {
+                       setupFunc() 
+                    }
+                }
+                if drawFunc != nil {
+                    drawFunc()
+                }
                 w.Update()
             }
         })
         w.OnPaintEvent(func(e *ui.PaintEvent) {
-            Painter = ui.NewPainter()
-            defer Painter.Close()
-            Painter.Begin(w)
-            if !isInit {
-                isInit=true
-                if setupFunc != nil {
-                   setupFunc() 
-                }
-            }
-            if drawFunc != nil {
-                drawFunc()
-            }
-            Painter.End()
+            painter = ui.NewPainter()
+            defer painter.Close()
+            painter.Begin(w)
+                painter.DrawImageEx(ui.Point{0, 0}, mainCanvas, mainCanvas.Rect())
+            painter.End()
         })
         w.OnMousePressEvent(func(e *ui.MouseEvent){
             _mousePressed=true
